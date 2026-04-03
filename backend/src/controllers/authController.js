@@ -82,14 +82,28 @@ export const signIn = async (req, res) => {
       maxAge: REFRESH_TOKEN_TTL,
     });
 
-    return res
-      .status(200)
-      .json({
-        message: `User ${user.displayName} logged in successfully`,
-        accessToken,
-      });
+    return res.status(200).json({
+      message: `User ${user.displayName} logged in successfully`,
+      accessToken,
+    });
   } catch (error) {
     console.error("Error during sign in:", error);
     return res.status(500).json({ message: "Error occurred while signing in" });
+  }
+};
+
+export const signOut = async (req, res) => {
+  try {
+    const token = req.cookies?.refreshToken;
+    if (token) {
+      await Session.deleteOne({ refreshToken: token });
+      res.clearCookie("refreshToken");
+      return res.sendStatus(204);
+    }
+  } catch (error) {
+    console.error("Error during sign out:", error);
+    return res
+      .status(500)
+      .json({ message: "Error occurred while signing out" });
   }
 };
