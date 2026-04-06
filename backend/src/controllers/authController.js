@@ -4,7 +4,7 @@ import Session from "../models/Session.js";
 import jwt from "jsonwebtoken";
 import crypto from "crypto";
 
-const ACCESS_TOKEN_TTL = "30m"; // thường dưới 15 phút để tăng cường bảo mật
+const ACCESS_TOKEN_TTL = "30s"; // thường dưới 15 phút để tăng cường bảo mật
 const REFRESH_TOKEN_TTL = 14 * 24 * 60 * 60 * 1000; // 14 days in seconds
 
 export const signUp = async (req, res) => {
@@ -105,5 +105,34 @@ export const signOut = async (req, res) => {
     return res
       .status(500)
       .json({ message: "Error occurred while signing out" });
+  }
+};
+
+export const refreshToken = async (req, res) => {
+  try {
+    const token = req.cookies?.refreshToken;
+    if (!token) {
+      return res.status(403).json({ message: "Refresh token is not exists" });
+    }
+    const session = await Session.findOne({ refreshToken: token });
+    if (!session) {
+      return res.status(403).json({
+        message: "Invalid refresh token or refresh token has expired",
+      });
+    }
+    if (session.expiresAt < new Date()) {
+      return res.status(403).json({ message: "Refresh token has expired" });
+    }
+    const accessToken = jwt.sign(
+      { userId: session.userId },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: ACCESS_TOKEN_TTL },
+    );
+    return res.status(200).json({ accessToken });
+  } catch (error) {
+    console.error("Error during refresh token:", error);
+    return res
+      .status(500)
+      .json({ message: "Error occurred while refreshing token" });
   }
 };
