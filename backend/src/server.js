@@ -7,7 +7,7 @@ import userRoute from "./routes/userRoute.js";
 import { protectedRoute } from "./middlewares/authMiddleware.js";
 import cors from "cors";
 import friendRoute from "./routes/friendRoute.js";
-
+import messageRoute from "./routes/messageRoute.js";
 dotevn.config();
 
 const app = express();
@@ -24,6 +24,7 @@ app.use("/api/auth", authRoute);
 app.use(protectedRoute);
 app.use("/api/users", userRoute);
 app.use("/api/friends", friendRoute);
+app.use("/api/messages", messageRoute);
 
 connectDB().then(() => {
   app.listen(PORT, () => {
