@@ -14,7 +14,6 @@ export const sendFriendRequest = async (req, res) => {
     }
 
     const userExist = await User.exists({ _id: to });
-    console.log("User exist:", userExist);
     if (!userExist) {
       return res.status(404).json({ message: "User not found" });
     }
