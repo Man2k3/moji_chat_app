@@ -25,7 +25,7 @@ export const sendDirectMessage = async (req, res) => {
           { userId: recipientId, joinedAt: new Date() },
         ],
         lastMessageAt: new Date(),
-        unreadCount: new Map(),
+        unreadCounts: new Map(),
       });
     }
     const message = await Message.create({

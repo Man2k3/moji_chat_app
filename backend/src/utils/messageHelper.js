@@ -17,7 +17,7 @@ export const updateConversationAfterCreateMessage = async (
   conversation.participants.forEach((p) => {
     const memberId = p.userId.toString();
     const isSender = memberId === senderId.toString();
-    const prevCount = conversation.unreadCount.get(memberId) || 0;
-    conversation.unreadCount.set(memberId, isSender ? 0 : prevCount + 1);
+    const prevCount = conversation.unreadCounts.get(memberId) || 0;
+    conversation.unreadCounts.set(memberId, isSender ? 0 : prevCount + 1);
   });
 };

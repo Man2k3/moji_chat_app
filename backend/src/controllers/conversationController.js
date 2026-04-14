@@ -94,7 +94,7 @@ export const getConversations = async (req, res) => {
       }));
       return {
         ...convo.toObject(),
-        unreadCount: convo.unreadCount || {},
+        unreadCounts: convo.unreadCounts || {},
         participants,
       };
     });
@@ -108,7 +108,7 @@ export const getConversations = async (req, res) => {
 export const getMessages = async (req, res) => {
   try {
     const { conversationId } = req.params;
-    const { limit = 20, cursor } = req.query;
+    const { limit = 50, cursor } = req.query;
     const query = { conversationId };
 
     if (cursor) {
