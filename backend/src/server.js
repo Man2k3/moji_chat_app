@@ -9,10 +9,11 @@ import cors from "cors";
 import friendRoute from "./routes/friendRoute.js";
 import messageRoute from "./routes/messageRoute.js";
 import conversationRoute from "./routes/conversationRoute.js";
+import { app, server } from "./socket/index.js";
 
 dotevn.config();
 
-const app = express();
+// const app = express();
 const PORT = process.env.PORT || 5001;
 
 // Middleware
@@ -30,7 +31,7 @@ app.use("/api/messages", messageRoute);
 app.use("/api/conversations", conversationRoute);
 
 connectDB().then(() => {
-  app.listen(PORT, () => {
+  server.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`);
   });
 });
