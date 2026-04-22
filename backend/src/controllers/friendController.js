@@ -112,8 +112,8 @@ export const getAllFriends = async (req, res) => {
     const friendship = await Friend.find({
       $or: [{ userA: userId }, { userB: userId }],
     })
-      .populate("userA", "_id displayName avatarUrl")
-      .populate("userB", "_id displayName avatarUrl")
+      .populate("userA", "_id displayName avatarUrl username")
+      .populate("userB", "_id displayName avatarUrl username")
       .lean();
     if (!friendship.length) {
       return res.status(200).json({ friends: [] });
